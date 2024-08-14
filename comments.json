@@ -1,0 +1,52 @@
+[
+  {
+    "user": "hide",
+    "comment": "27：その加速度を計算した結果も書く(SSHの資料にあったはず)\nフォントと式をWordで書いて後日更新",
+    "file": null
+  },
+  {
+    "user": "hi",
+    "comment": "参考文献追加",
+    "file": null
+  },
+  {
+    "user": "hi",
+    "comment": "接近検知全体的に記載が雑 要修正",
+    "file": null
+  },
+  {
+    "user": "hi",
+    "comment": "52：SFC学び：学びたい理由を書く",
+    "file": null
+  },
+  {
+    "user": "hi",
+    "comment": "35：トマールくんマモールくん連携を書く",
+    "file": null
+  },
+  {
+    "user": "hi",
+    "comment": "18/19：図をきれいにする。ちょっと見にくい",
+    "file": null
+  },
+  {
+    "user": "yu",
+    "comment": "10のステップ",
+    "file": "/uploads/10のステップ.txt"
+  },
+  {
+    "user": "Yu2",
+    "comment": "トマールくん加速度計算",
+    "file": "/uploads/トマールくんのモデル計算の完全解釈.pdf"
+  },
+  {
+    "user": "yu",
+    "comment": "スイッチ回路図",
+    "file": "/uploads/15uXUnl7T-ibtQqBWjQ5iT-PswFsAcHH8XAblGBeQKkQ.png"
+  },
+  {
+    "user": "hi",
+    "comment": "21\\22の間にスイッチ回路を記載\n各部品の役割\nGPIO29:ON/OFF制御\n　　Hi Level：ON\n　　Low Level：OFF\nダイオード：サージ保護\n\n(参考：サージ保護とはスイッチのON/OFF時に大きな逆起電力が発生して部品が破損しないように電流を逃がす回路)",
+    "file": null
+  }
+]
