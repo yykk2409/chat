@@ -47,6 +47,10 @@ app.get("/", (req, resp) => {
     resp.status(200).send(readFileSync("./index2.html", { encoding: "utf-8" }));
 });
 
+app.get("/icon.png", (req, resp) => {
+    resp.status(200).send(readFileSync("./icon.png"));
+});
+
 app.post("/addComment", upload.single('file'), (req, resp) => {
     const newComment = {
         user: req.body.user,

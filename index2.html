@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/0.0.11/push.min.js"></script>
+    <link rel="icon" href="favicon.ico">
     <title>Chat</title>
 </head>
 
@@ -51,8 +52,8 @@
 	                    <h3>${comment.user}</h3>
 	                    <p id="comment${Array.prototype.indexOf.call(comments, comment)}" >${comment.comment}</p>
 							  ${comment.file ? `<a href="${comment.file}" download class="file-link">Download File</a>` : ""}
-								<span class="material-symbols-outlined" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
-								<span class="material-symbols-outlined" onclick="deleteComment(${index})">delete</span>
+								<span class="material-symbols-outlined edit-icon" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
+								<span class="material-symbols-outlined delete-icon" onclick="deleteComment(${index})">delete</span>
 	
 							  <span class="material-symbols-outlined copy-icon" id="btn_comment${index}" onclick="copyComment(${index})">content_copy</span>`
         }
@@ -129,6 +130,8 @@
             loadComments();
             commentField.value = "";
             fileField.value = ""; // Clear the file input
+			   commentFieldContainer.style.height = 70 + 'px';
+			   commentField.style.height = 32 + 'px';
             document.getElementById("input-label").style.backgroundColor = "rgb(64, 64, 64)"
         });
     }
@@ -140,7 +143,7 @@
         // 編集用のテキストフィールドと保存・キャンセルボタンを表示
         commentText.innerHTML = `
 	        <textarea class="edit-field" id="edit-field${index}">${originalText}</textarea>
-			  <button onclick="saveComment(${index})" style="margin-left:-350px; background-color:rgb(233, 233, 233); border:0px; border-radius:50px; width:100px; height:40px;">Save</button> <button onclick="cancelEdit(${index}, '${originalText}')" style="color:rgb(233, 233, 233); background-color:rgb(64, 64, 64); border:0px; border-radius:50px; width:100px; height:40px;">Cancel</button>
+			  <button onclick="saveComment(${index})" style="margin-left:-350px; background-color:rgb(233, 233, 233); border:0px; border-radius:50px; width:100px; height:40px;">Save</button> <button onclick="cancelEdit(${index})" style="color:rgb(233, 233, 233); background-color:rgb(64, 64, 64); border:0px; border-radius:50px; width:100px; height:40px;">Cancel</button>
 	    `;
 
         // 元のテキストエリアの高さと同様に調整する
@@ -170,8 +173,8 @@
 	                    <h3>${comment.user}</h3>
 	                    <p id="comment${Array.prototype.indexOf.call(comments, comment)}" >${comment.comment}</p>
 							  ${comment.file ? `<a href="${comment.file}" download class="file-link">Download File</a>` : ""}
-								<span class="material-symbols-outlined" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
-								<span class="material-symbols-outlined" onclick="deleteComment(${index})">delete</span>
+								<span class="material-symbols-outlined edit-icon" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
+								<span class="material-symbols-outlined delete-icon" onclick="deleteComment(${index})">delete</span>
 	
 							  <span class="material-symbols-outlined copy-icon" id="btn_comment${index}" onclick="copyComment(${index})">content_copy</span>`
             }
@@ -180,9 +183,26 @@
         });
     }
 
-    function cancelEdit(index, originalText) {
+    async function cancelEdit(index) {
         document.getElementById(`edit-btn${index}`).style.display = "inline"
-        document.getElementById(`comment${index}`).innerHTML = originalText;
+        const comments = await (await fetch("/loadComments")).json();
+		  commentSection.innerHTML = "";
+		  for (const comment of comments) {
+			 //const decodefilename = comment.file ? decodeURI(comment.file) : ""
+			 //console.log(comment.file) 
+			  const index = Array.prototype.indexOf.call(comments, comment)
+			  commentSection.innerHTML += `
+	                <div class="comment">
+	                    <h3>${comment.user}</h3>
+	                    <p id="comment${Array.prototype.indexOf.call(comments, comment)}" >${comment.comment}</p>
+							  ${comment.file ? `<a href="${comment.file}" download class="file-link">Download File</a>` : ""}
+								<span class="material-symbols-outlined edit-icon" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
+								<span class="material-symbols-outlined delete-icon" onclick="deleteComment(${index})">delete</span>
+	
+							  <span class="material-symbols-outlined copy-icon" id="btn_comment${index}" onclick="copyComment(${index})">content_copy</span>`
+		  }
+
+		  previousCommentCount = comments.length;
     }
 
     function deleteComment(index) {
@@ -205,8 +225,8 @@
                             <h3>${comment.user}</h3>
                             <p id="comment${Array.prototype.indexOf.call(comments, comment)}" >${comment.comment}</p>
                                 ${comment.file ? `<a href="${comment.file}" download class="file-link">Download File</a>` : ""}
-                                    <span class="material-symbols-outlined" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
-                                    <span class="material-symbols-outlined" onclick="deleteComment(${index})">delete</span>
+                                    <span class="material-symbols-outlined edit-icon" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
+                                    <span class="material-symbols-outlined delete-icon" onclick="deleteComment(${index})">delete</span>
         
                                 <span class="material-symbols-outlined copy-icon" id="btn_comment${index}" onclick="copyComment(${index})">content_copy</span>`
                 }
@@ -233,7 +253,7 @@
         const comments = await (await fetch("/loadComments")).json();
 
 
-        if (comments.length > previousCommentCount && comments[comments.length - 1].user !== lastCommentUser && comments.length > 1) {
+        if (comments.length != previousCommentCount && comments.length > 1) {
             commentSection.innerHTML = "";
             for (const comment of comments) {
                 const index = Array.prototype.indexOf.call(comments, comment)
@@ -242,18 +262,19 @@
 	                    <h3>${comment.user}</h3>
 	                    <p id="comment${Array.prototype.indexOf.call(comments, comment)}" >${comment.comment}</p>
 							  ${comment.file ? `<a href="${comment.file}" download class="file-link">Download File</a>` : ""}
-								<span class="material-symbols-outlined" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
-								<span class="material-symbols-outlined" onclick="deleteComment(${index})">delete</span>
+								<span class="material-symbols-outlined edit-icon" id="edit-btn${index}" onclick="editComment(${index})">edit</span>
+								<span class="material-symbols-outlined delete-icon" onclick="deleteComment(${index})">delete</span>
 	
 							  <span class="material-symbols-outlined copy-icon" id="btn_comment${index}" onclick="copyComment(${index})">content_copy</span>`
             }
-
-            const latestComment = comments[comments.length - 1];
-            Push.create(latestComment.user + " says:", {
-                body: latestComment.comment,
-                icon: '/path/to/icon.png', // Optional: Set the path to an icon
-                timeout: 4000
-            });
+				if (comments.length > previousCommentCount && comments[comments.length - 1].user !== lastCommentUser) {	
+	            const latestComment = comments[comments.length - 1];
+	            Push.create(latestComment.user + " says:", {
+	                body: latestComment.comment,
+	                icon: '/icon.png', // Optional: Set the path to an icon
+	                timeout: 4000
+	            });
+				}
         }
         previousCommentCount = comments.length;
     }
@@ -353,6 +374,14 @@
         cursor: pointer;
     }
 
+	.edit-icon {
+        cursor: pointer;
+    }
+
+	.delete-icon {
+        cursor: pointer;
+    }
+
     .copy-icon {
         cursor: pointer;
     }
@@ -413,6 +442,7 @@
 
     .file-link {
         color: var(--accentColor);
+		  width:150px;
         font-size: 1.2rem;
         display: block;
         margin-top: 5px;
