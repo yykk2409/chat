@@ -68,7 +68,6 @@
 
         // 入力された値の行数を計算
         const lines = (commentField.value + '\n').match(/\n/g).length;
-        console.log(lines)
 
         // 高さを再計算し、最大5行分まで拡張
         const newHeight = Math.min(lineHeight * lines + PADDING_Y, lineHeight * MAX_LINES + PADDING_Y);
@@ -138,7 +137,6 @@
     function editComment(index) {
         const commentText = document.getElementById(`comment${index}`);
         const originalText = commentText.textContent;
-        console.log(document.getElementById(`edit-btn${index}`))
         document.getElementById(`edit-btn${index}`).style.display = "none"
         // 編集用のテキストフィールドと保存・キャンセルボタンを表示
         commentText.innerHTML = `
