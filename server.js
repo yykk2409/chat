@@ -8,11 +8,11 @@ const port = 8000;
 const app = express();
 app.use(express.json());
 
-const option = {
+/*const option = {
     key: readFileSync('./cert/privatekey.pem'),
     cert: readFileSync('./cert/cert.pem'),    
-}
-const server = require('https').createServer(option, app)
+}*/
+//const server = require('https').createServer(option, app)
 
 const uploadDir = './uploads';
 if (!existsSync(uploadDir)) {
